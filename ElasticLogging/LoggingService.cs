@@ -1,6 +1,7 @@
 ﻿using ElasticLogging.Classes;
 using ElasticLogging.Enums;
 using Nest;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -70,17 +71,13 @@ namespace ElasticLogging
         public void Flush()
         {
             if (_pendingLogs.Any())
-            {
                 _elasticClient.IndexMany(_pendingLogs);
-            }
         }
 
         public async Task FlushAsync()
         {
             if (_pendingLogs.Any())
-            {
                 await _elasticClient.IndexManyAsync(_pendingLogs);
-            }
         }
 
         public void Fatal(Exception ex)
@@ -239,11 +236,12 @@ namespace ElasticLogging
         {
             LogMessage log = new LogMessage();
 
+            log.LoggerName = _logName;
             log.Message = message;
             log.HostName = Environment.MachineName;
             log.UserName = Environment.UserName;
             log.TimeStamp = DateTime.Now;
-            log.Level = level;
+            log.Level = level.ToString();
 
             return log;
         }
