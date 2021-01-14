@@ -71,13 +71,19 @@ namespace ElasticLogging
         public void Flush()
         {
             if (_pendingLogs.Any())
+            {
                 _elasticClient.IndexMany(_pendingLogs);
+                _pendingLogs.Clear();
+            }
         }
 
         public async Task FlushAsync()
         {
             if (_pendingLogs.Any())
+            {
                 await _elasticClient.IndexManyAsync(_pendingLogs);
+                _pendingLogs.Clear();
+            }
         }
 
         public void Fatal(Exception ex)
