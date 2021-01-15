@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ElasticLogging
 {
-    public class LoggingService : ILoggingService, IDisposable, IAsyncDisposable
+    public class ElasticLogging : IElasticLogging, IDisposable, IAsyncDisposable
     {
         private readonly ElasticClient _elasticClient;
         private readonly string _logName;
@@ -18,7 +18,7 @@ namespace ElasticLogging
         private readonly List<LogMessage> _pendingLogs;
         private readonly LoggingSettings _settings;
 
-        public LoggingService(LoggingSettings settings, string name, bool logToFile)
+        public ElasticLogging(LoggingSettings settings, string name, bool logToFile)
         {
             _logName = name;
             _logToFile = logToFile;
