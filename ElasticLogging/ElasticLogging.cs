@@ -1,7 +1,6 @@
 ﻿using ElasticLogging.Classes;
 using ElasticLogging.Enums;
 using Nest;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ElasticLogging
 {
-    public class ElasticLogging : IElasticLogging, IDisposable, IAsyncDisposable
+    public class Logger : ILogger, IDisposable, IAsyncDisposable
     {
         private readonly ElasticClient _elasticClient;
         private readonly string _logName;
@@ -18,7 +17,7 @@ namespace ElasticLogging
         private readonly List<LogMessage> _pendingLogs;
         private readonly LoggingSettings _settings;
 
-        public ElasticLogging(LoggingSettings settings, string name, bool logToFile)
+        public Logger(LoggingSettings settings, string name, bool logToFile)
         {
             _logName = name;
             _logToFile = logToFile;

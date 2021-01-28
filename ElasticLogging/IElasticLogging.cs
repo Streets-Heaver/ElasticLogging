@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElasticLogging
 {
-    public interface IElasticLogging
+    public interface ILogger
     {
         void Debug(string message);
         Task DebugAsync(string message);
