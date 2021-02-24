@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ElasticLogging
 {
-    public class Logger : ILogger, IDisposable, IAsyncDisposable
+    public sealed class Logger : ILogger
     {
         private readonly ElasticClient _elasticClient;
         private readonly string _logName;
