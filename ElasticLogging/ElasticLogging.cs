@@ -9,24 +9,17 @@ using System.Threading.Tasks;
 
 namespace ElasticLogging
 {
-    public sealed class Logger : ILogger
+    public sealed class ElasticLogging : IElasticLogging
     {
         private readonly ElasticClient _elasticClient;
-        private readonly string _logName;
-        private readonly bool _logToFile;
+ 
         private readonly List<LogMessage> _pendingLogs;
         private readonly LoggingSettings _settings;
 
-        public Logger(LoggingSettings settings, string name, bool logToFile)
+        public ElasticLogging(ConnectionSettings connectionSettings, LoggingSettings loggingSettings)
         {
-            _logName = name;
-            _logToFile = logToFile;
-
-            var connectionSettings = new ConnectionSettings(new Uri(settings.ElasticSearchUrl));
-            connectionSettings.DefaultIndex(settings.Index);
-
             _elasticClient = new ElasticClient(connectionSettings);
-            _settings = settings;
+            _settings = loggingSettings;
             _pendingLogs = new List<LogMessage>();
         }
 
@@ -39,11 +32,11 @@ namespace ElasticLogging
 
         private void LogMessageToFile(string msg)
         {
-            if (_logToFile)
+            if (_settings.LogToFile)
             {
                 var path = GetTempPath();
                 StreamWriter sw = File.AppendText(
-                     path + _logName + ".txt");
+                     path + _settings.Name + ".txt");
                 try
                 {
                     string logLine = string.Format(
@@ -241,7 +234,7 @@ namespace ElasticLogging
         {
             LogMessage log = new LogMessage();
 
-            log.LoggerName = _logName;
+            log.LoggerName = _settings.Name;
             log.Message = message;
             log.HostName = Environment.MachineName;
             log.UserName = Environment.UserName;
